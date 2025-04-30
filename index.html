@@ -46,6 +46,33 @@
 
   <main id="list"></main>
 
+<section id="reviews" class="hidden">
+  <h3 data-i18n="reviews">Отзывы</h3>
+  <div id="rev-track"></div>
+  <button id="prev">◀</button><button id="next">▶</button>
+</section>
+
+<section id="viewer" class="hidden">
+  <h3 data-i18n="viewer">3-D / AR просмотр</h3>
+  <model-viewer id="demo" src="models/bouquet.glb" ar ar-modes="scene-viewer quick-look webxr"
+                camera-controls auto-rotate style="width:100%;height:300px;background:#000"></model-viewer>
+</section>
+
+<section id="team" class="hidden">
+  <h3 data-i18n="team">Наша команда</h3>
+  <div id="staff"></div>
+</section>
+
+<section id="about" class="hidden"></section>
+
+<nav id="tabs">
+  <button data-tab="list">Каталог</button>
+  <button data-tab="reviews">Отзывы</button>
+  <button data-tab="viewer">3-D</button>
+  <button data-tab="team">Команда</button>
+  <button data-tab="about">О нас</button>
+</nav>
+
   <!-- модальное окно конструктора -->
   <dialog id="builder">
     <h3>Соберите свой букет</h3>
