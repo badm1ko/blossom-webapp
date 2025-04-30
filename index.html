@@ -1,108 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <title>Blossom Boutique – витрина</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<meta charset="utf-8" />
+<title>Blossom Boutique</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="style.css" />
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-
 <body>
   <header>
-    <h1 id="title">🌸 Blossom Boutique</h1>
+    <span data-i18n="title">Blossom Boutique</span>
 
     <select id="lang">
       <option value="ru">RU</option>
       <option value="en">EN</option>
     </select>
 
-    <button id="cartBtn"><span id="cartCount">0</span>🛒</button>
+    <button id="btn-cart">🛒 <span id="cart-count">0</span></button>
   </header>
 
-  <!-- Блок фильтров -->
   <section id="filters">
-    <input type="range" id="priceRange" min="0" max="10000" value="10000" />
-    <select id="colorFilter">
-      <option value="all">Все цвета</option>
-      <option value="red">Красный</option>
-      <option value="white">Белый</option>
-      <option value="mix">Микс</option>
+    <input id="search" placeholder="Поиск…" />
+
+    <select id="sort">
+      <option value="name">По названию</option>
+      <option value="price_asc">Цена ↑</option>
+      <option value="price_desc">Цена ↓</option>
     </select>
-    <select id="occasionFilter">
-      <option value="all">Любой повод</option>
-      <option value="birthday">День рождения</option>
-      <option value="love">Любовь</option>
-      <option value="wedding">Свадьба</option>
+
+    <select id="flt-color">
+      <option value="">Все цвета</option>
+      <option>красный</option><option>белый</option>
+      <option>розовый</option><option>фиолетовый</option>
     </select>
+
+    <select id="flt-occ">
+      <option value="">Любой повод</option>
+      <option>свадьба</option><option>день-рождения</option>
+      <option>годовщина</option>
+    </select>
+
+    <input id="price" type="range" min="0" max="6000" step="100" value="6000" />
+    <span id="price-val">≤ 6000 ₽</span>
   </section>
 
-  <select id="flt-color">
-  <option value="">Все цвета</option>
-  <option value="красный">Красный</option> …
-</select>
-<select id="flt-occ">
-  <option value="">Любой повод</option>
-  <option value="свадьба">Свадьба</option> …
-</select>
+  <main id="list"></main>
 
-  <!-- Сетка карточек -->
-  <section id="grid"></section>
+  <!-- модальное окно конструктора -->
+  <dialog id="builder">
+    <h3>Соберите свой букет</h3>
+    <div id="stems"></div>
 
-  <input id="promo" placeholder="Введите промокод" />
-  <button id="btn-promo">OK</button>
-  <span id="promo-ok" hidden>✔ -10 %</span>
-  <div id="timer" hidden></div>
-  
-  <select id="lang">
-    <option value="ru">RU</option>
-    <option value="en">EN</option>
-  </select>
-  <span data-i18n="title">Blossom Boutique</span>
-  
-  <div id="builder" class="modal">
-  <h3>Ваш букет</h3>
-  <div id="stems"></div>
-  <select id="flower">
-     <option value="rose" data-price="200">🌹 Роза 200₽</option> …
-  </select>
-  <button id="add">Добавить стебель</button>
-  <hr>
-  Итого: <span id="sum">0</span> ₽
-  <button id="addToCart">В корзину</button>
-</div>
+    <select id="flower"></select>
+    <button id="add">Добавить стебель</button>
+    <hr />
+    Итого: <span id="sum">0</span> ₽
+    <button id="addToCart">В корзину</button>
+    <button id="close">×</button>
+  </dialog>
 
-  <!-- Конфигуратор -->
-  <section id="drawer" class="hidden">
-    <h2 id="drawerTitle"></h2>
-    <div id="drawerBody"></div>
-    <button id="addToCart">Добавить</button>
-  </section>
-
-  <input id="search"  placeholder="Поиск…" />
-<select id="sort">
-   <option value="name">Название</option>
-   <option value="price_asc">Цена ↑</option>
-   <option value="price_desc">Цена ↓</option>
-</select>
-
-  <!-- Корзина -->
-  <section id="cart" class="hidden">
-    <h2>🛍 Корзина</h2>
-    <ul id="cartList"></ul>
-
-    <div id="promoBlock">
-      <input id="promoInput" placeholder="Промокод" />
-      <button id="applyPromo">OK</button>
+  <!-- корзина -->
+  <dialog id="cart">
+    <h3 data-i18n="cart">Корзина</h3>
+    <div id="cart-items"></div>
+    <div id="promo-block">
+      <input id="promo" placeholder="Промокод" />
+      <button id="btn-promo">OK</button>
+      <span id="promo-ok" hidden>✔ -10 %</span>
+      <span id="timer" hidden></span>
     </div>
+    <b>Сумма: <span id="cart-sum">0</span> ₽</b>
+    <button id="checkout">Оплатить</button>
+    <button id="cart-close">×</button>
+  </dialog>
 
-    <p id="discountTimer" class="hidden"></p>
-    <p id="total">Итого: 0 ₽</p>
-
-    <button id="arBtn" class="hidden">👓 3-D / AR-превью</button>
-    <button id="checkout" disabled>Оплатить</button>
-  </section>
-
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
