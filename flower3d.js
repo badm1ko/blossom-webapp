@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import * as THREE from './three.module.min.js';   // локальная копия three.js
+import * as THREE from "https://esm.sh/three@0.160.0";   // локальная копия three.js
 
 const canvas   = document.getElementById('scene');
 const scene    = new THREE.Scene();
