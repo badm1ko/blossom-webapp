@@ -1,44 +1,47 @@
-const pages = {
-  about: `
-    <div class="card">
-      <h3>О нас</h3>
-      <p>Blossom Boutique — это команда флористов, которые превращают эмоции в букеты
-         уже более 5 лет. Мы работаем только с свежими цветами, а каждая композиция
-         собирается вручную и с любовью ❤️</p>
-    </div>`,
-  reviews: `
-    <div class="card review">
-      <img src="https://i.pravatar.cc/80?img=5" alt="">
-      <p><b>Анна:</b> «Букет превзошёл ожидания! Курьер доставил точно ко времени»</p>
-    </div>
-    <div class="card review">
-      <img src="https://i.pravatar.cc/80?img=12" alt="">
-      <p><b>Олег:</b> «Заказывал маме на день рождения – она в восторге. Спасибо!»</p>
-    </div>`,
-  team: `
-    <div class="card">
-      <h3>Наша команда</h3>
-      <p><b>Мария</b> – главный флорист<br>
-         <b>Виктор</b> – дизайнер композиций<br>
-         <b>Ксения</b> – менеджер доставки</p>
-    </div>`,
-  contacts: `
-    <div class="card">
-      <h3>Контакты</h3>
-      <p>Телефон: +7 900 123-45-67<br>
-         Instagram: @blossom.bqt<br>
-         Адрес шоу-рума: г. Самара, ул. Цветочная, 15</p>
-    </div>`
+// ───────── маленький помощник ─────────
+const $ = s => document.querySelector(s);
+
+// ───────── вкладки (навигация) ────────
+$('#tabs').onclick = e=>{
+  if(e.target.dataset.tab){
+    document.querySelectorAll('#tabs button').forEach(b=>b.classList.remove('active'));
+    e.target.classList.add('active');
+
+    document.querySelectorAll('main section').forEach(sec=>sec.classList.add('hidden'));
+    $('#'+e.target.dataset.tab).classList.remove('hidden');
+  }
 };
+// активируем первую вкладку
+$('#tabs button[data-tab="about"]').click();
 
-const container = document.getElementById("page-container");
-const navBtns   = document.querySelectorAll("nav button");
+// ───────── отзывы ─────────────────────
+const reviews=[
+  {user:"Мария", text:"💐 Самые свежие цветы в городе!"},
+  {user:"Дмитрий",text:"Сюрприз удался — девушка в восторге."},
+  {user:"Катя",   text:"Очень красиво упаковали, курьер вежливый."}
+];
+const track = $('#rev-track');
+reviews.forEach(r=>{
+  const div=document.createElement('div');
+  div.className='review';
+  div.innerHTML=`<blockquote>“${r.text}”</blockquote><small>— ${r.user}</small>`;
+  track.appendChild(div);
+});
+let idx=0;
+function slide(i){ track.style.transform=`translateX(${-100*i}%)`; }
+$('#rev-prev').onclick=_=>{ idx=(idx-1+reviews.length)%reviews.length; slide(idx);};
+$('#rev-next').onclick=_=>{ idx=(idx+1)%reviews.length; slide(idx);};
 
-function openPage(id){
-  navBtns.forEach(b=>b.classList.toggle("active", b.dataset.page===id));
-  container.innerHTML = pages[id] || "";
-}
-navBtns.forEach(b => b.addEventListener("click", () => openPage(b.dataset.page)));
-
-// стартовая страница
-openPage("about");
+// ───────── команда ────────────────────
+const staff=[
+  {name:"Елена", role:"Флорист-дизайнер", src:"img/elena.jpg"},
+  {name:"Игорь", role:"Флорист-декоратор", src:"img/igor.jpg"},
+  {name:"Ольга", role:"Менеджер", src:"img/olga.jpg"},
+  {name:"Арти",  role:"Курьер",   src:"img/arty.jpg"}
+];
+const grid = $('#staff');
+staff.forEach(p=>{
+  const c=document.createElement('div'); c.className='card';
+  c.innerHTML=`<img src="${p.src}" alt=""><br><b>${p.name}</b><br><small>${p.role}</small>`;
+  grid.appendChild(c);
+});
