@@ -150,3 +150,20 @@ function redraw(){
   $('#checkout').innerText = tr[lang].pay;
   calcTotal();
 }
+
+function renderList(){
+  const root = document.getElementById('list');
+  root.innerHTML='';
+  filtered.forEach(p=>{
+     const div = document.createElement('div');
+     div.className='card';
+     div.innerHTML = `
+        <img src="${p.image}" />
+        <h4>${p.name}</h4>
+        <small>${p.price} ₽</small>
+        <button data-id="${p.id}">🛒</button>
+     `;
+     root.append(div);
+  });
+}
+
