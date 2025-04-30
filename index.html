@@ -8,31 +8,28 @@
   <script defer src="main.js"></script>
 </head>
 <body>
-  <!---------------- HEADER ---------------->
+  <!-- ───────── HEADER ───────── -->
   <header>
     <h1><span class="logo">🌸</span> Blossom Boutique</h1>
     <p class="tagline">Цветы, собранные с любовью</p>
     <nav id="tabs">
-      <button data-page="about"    class="active">О нас</button>
+      <button data-page="about" class="active">О нас</button>
       <button data-page="reviews">Отзывы</button>
       <button data-page="team">Команда</button>
       <button data-page="contacts">Контакты</button>
     </nav>
   </header>
 
-  <!---------------- PAGES ----------------->
+  <!-- ───────── PAGES ───────── -->
   <main>
-    <!----- 1. О НАС -->
+    <!-- 1. О НАС -->
     <section id="page-about" class="page visible">
       <h2>О нас</h2>
-  <p><b>Blossom Boutique</b> — это больше, чем просто цветочный магазин.
-        Мы создаём уникальные композиции, в которых каждый 
-        лепесток — проявление заботы и стиля.
-        Мы верим, что цветы способны говорить за нас.
-    <p></p>
-     <p>Наши флористы вдохновляются природой, модой и вашими историями.
-        Мы работаем только со свежими цветами, тщательно подбираем упаковку и 
-        оформляем заказы с душой.</p></p>
+      <p><b>Blossom Boutique</b> — это больше, чем просто цветочный магазин.
+         Мы создаём уникальные композиции, в которых каждый лепесток — проявление заботы и стиля.
+         Мы верим, что цветы способны говорить за нас.</p>
+      <p>Наши флористы вдохновляются природой, модой и вашими историями.
+         Мы работаем только со свежими цветами, тщательно подбираем упаковку и оформляем заказы с душой.</p>
 
       <div class="stats">
         <div><b>18</b><span>лет<br>работы</span></div>
@@ -41,84 +38,62 @@
       </div>
     </section>
 
-    <!----- 2. ОТЗЫВЫ -->
+    <!-- 2. ОТЗЫВЫ -->
     <section id="page-reviews" class="page">
       <h2>Отзывы</h2>
-      <div class="review-list">
-        <!-- 15 карточек -->
-        <article class="card"><img src="https://i.pravatar.cc/72?u=1">
-          <div><b>Анна</b><br>«Букет превзошёл ожидания! Курьер доставил точно ко времени»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=2">
-          <div><b>Олег</b><br>«Заказывал маме на день рождения — она в восторге»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=3">
-          <div><b>Ника</b><br>«Очень аккуратная упаковка и свежие цветы. Спасибо!»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=4">
-          <div><b>Кирилл</b><br>«Помогли собрать букет “на последнюю минуту”, выручили»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=5">
-          <div><b>Елена</b><br>«Отдельное спасибо за открытку — получатель растроган»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=6">
-          <div><b>Сергей</b><br>«Сделали именно то, что я представлял. Рекомендую!»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=7">
-          <div><b>Марина</b><br>«Цветы простояли больше недели, супер качество»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=8">
-          <div><b>Даша</b><br>«Заказываем корпоративные композиции, всегда на уровне»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=9">
-          <div><b>Игорь</b><br>«Быстро, красиво, недорого — идеальный сервис!»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=10">
-          <div><b>Софья</b><br>«Мой новый любимый магазин, буду заказывать ещё»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=11">
-          <div><b>Роман</b><br>«Курьер позвонил за 10 минут и вручил букет с улыбкой»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=12">
-          <div><b>Полина</b><br>«Цветы из редких сортов – нашли и привезли на следующий день»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=13">
-          <div><b>Виктор</b><br>«Получатель в другом городе, всё чётко без  моего участия»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=14">
-          <div><b>Наталья</b><br>«Спасибо менеджеру за терпение и советы по сочетанию цветов»</div></article>
-        <article class="card"><img src="https://i.pravatar.cc/72?u=15">
-          <div><b>Максим</b><br>«Никаких скрытых доплат, всё прозрачно. Молодцы!»</div></article>
+
+      <!-- обёртка с фиксированной высотой -->
+      <div class="slider">
+        <!-- сами карточки -->
+        <article class="card"><img src="https://i.pravatar.cc/72?u=1"><div><b>Анна</b><br>«Букет превзошёл ожидания! Курьер доставил точно ко времени»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=2"><div><b>Олег</b><br>«Заказывал маме на день рождения — она в восторге»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=3"><div><b>Ника</b><br>«Очень аккуратная упаковка и свежие цветы. Спасибо!»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=4"><div><b>Кирилл</b><br>«Помогли собрать букет “на последнюю минуту”, выручили»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=5"><div><b>Елена</b><br>«Отдельное спасибо за открытку — получатель растроган»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=6"><div><b>Сергей</b><br>«Сделали именно то, что я представлял. Рекомендую!»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=7"><div><b>Марина</b><br>«Цветы простояли больше недели, супер качество»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=8"><div><b>Даша</b><br>«Заказываем корпоративные композиции, всегда на уровне»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=9"><div><b>Игорь</b><br>«Быстро, красиво, недорого — идеальный сервис!»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=10"><div><b>Софья</b><br>«Мой новый любимый магазин, буду заказывать ещё»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=11"><div><b>Роман</b><br>«Курьер позвонил за 10 минут и вручил букет с улыбкой»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=12"><div><b>Полина</b><br>«Цветы из редких сортов – нашли и привезли на следующий день»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=13"><div><b>Виктор</b><br>«Получатель в другом городе, всё чётко без моего участия»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=14"><div><b>Наталья</b><br>«Спасибо менеджеру за терпение и советы по сочетанию цветов»</div></article>
+        <article class="card"><img src="https://i.pravatar.cc/72?u=15"><div><b>Максим</b><br>«Никаких скрытых доплат, всё прозрачно. Молодцы!»</div></article>
+      </div>
+
+      <!-- стрелки -->
+      <div class="slider-nav">
+        <button id="prev">&ltri;</button>
+        <button id="next">&rtri;</button>
       </div>
     </section>
 
-    <!----- 3. КОМАНДА -->
+    <!-- 3. КОМАНДА -->
     <section id="page-team" class="page">
       <h2>Команда</h2>
       <div class="team-grid">
-        <!-- карточки участников -->
-        <figure data-member="maria">
-          <img src="https://i.pravatar.cc/140?u=dmitry">
-          <figcaption>Мария<br><span>Главный&nbsp;флорист</span></figcaption>
-        </figure>
-        <figure data-member="alex">
-          <img src="https://i.pravatar.cc/140?u=alex">
-          <figcaption>Алексей<br><span>Креативный&nbsp;директор</span></figcaption>
-        </figure>
-        <figure data-member="kate">
-          <img src="https://i.pravatar.cc/140?u=kate">
-          <figcaption>Екатерина<br><span>Декоратор</span></figcaption>
-        </figure>
-        <figure data-member="dmitry">
-          <img src="https://i.pravatar.cc/140?u=maria">
-          <figcaption>Дмитрий<br><span>Логистика</span></figcaption>
-        </figure>
+        <figure data-member="maria"><img src="https://i.pravatar.cc/140?u=dmitry"><figcaption>Мария<br><span>Главный&nbsp;флорист</span></figcaption></figure>
+        <figure data-member="alex"><img src="https://i.pravatar.cc/140?u=alex"><figcaption>Алексей<br><span>Креативный&nbsp;директор</span></figcaption></figure>
+        <figure data-member="kate"><img src="https://i.pravatar.cc/140?u=kate"><figcaption>Екатерина<br><span>Декоратор</span></figcaption></figure>
+        <figure data-member="dmitry"><img src="https://i.pravatar.cc/140?u=maria"><figcaption>Дмитрий<br><span>Логистика</span></figcaption></figure>
       </div>
     </section>
 
-    <!----- 4. КОНТАКТЫ -->
+    <!-- 4. КОНТАКТЫ -->
     <section id="page-contacts" class="page">
       <h2>Контакты</h2>
       <p>📍 г. Самара, ул. Ново-садовая, 123<br>
          🕒 09:00 – 21:00 ежедневно<br>
          📞 +7 (902) 292-69-03</p>
-
-      <iframe
-        src="https://yandex.ru/map-widget/v1/?um=constructor%3A5d2ef4d1f4cb9928&scroll=true"
-        width="100%" height="240" allowfullscreen></iframe>
+      <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A5d2ef4d1f4cb9928&scroll=true"
+              width="100%" height="240" allowfullscreen></iframe>
     </section>
   </main>
 
   <footer>© 2007-2025 Blossom Boutique</footer>
 
-  <!---------------- MODAL для команды ---------------->
+  <!-- ───────── MODAL «Команда» ───────── -->
   <div id="modal" class="hidden">
     <div class="modal-window">
       <button id="modal-close">✖</button>
