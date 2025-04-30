@@ -1,66 +1,72 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8"/>
   <title>Blossom Boutique</title>
-
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script type="module" src="main.js" defer></script>
 </head>
 <body>
-
-<header>
-  <h1>Blossom Boutique</h1>
-  <p class="tag">Цветы, собранные с любовью</p>
-  <nav>
-    <a href="#about">О нас</a>
-    <a href="#reviews">Отзывы</a>
-    <a href="#team">Команда</a>
-    <a href="#contacts">Контакты</a>
-  </nav>
-</header>
-
-<!-- hero-блок с 3-d анимацией -->
-<section id="hero">
+  <!--  ── «Падающие» лепестки (canvas заполняет экран) ────────────────── -->
   <canvas id="scene"></canvas>
-</section>
 
-<section id="about">
-  <h2>О нас</h2>
-  <p>Blossom Boutique — это команда флористов-энтузиастов из Самары. Мы создаём
-     букеты, которые говорят громче слов и дарят эмоции.</p>
-</section>
+  <!--  ── HEADER ───────────────────────────────────────────────────────── -->
+  <header>
+    <h1><span class="logo">🌸</span> Blossom Boutique</h1>
+    <nav id="tabs">
+      <button data-page="about"    class="active">О нас</button>
+      <button data-page="reviews">Отзывы</button>
+      <button data-page="team">Команда</button>
+      <button data-page="contacts">Контакты</button>
+    </nav>
+  </header>
 
-<section id="reviews">
-  <h2>Отзывы</h2>
-  <blockquote>
-    <img src="https://i.pravatar.cc/64?u=anna" />
-    <p><strong>Анна:</strong> «Букет превзошёл ожидания! Курьер доставил точно ко времени»</p>
-  </blockquote>
-  <blockquote>
-    <img src="https://i.pravatar.cc/64?u=oleg" />
-    <p><strong>Олег:</strong> «Брал для мамы на день рождения — она в восторге. Спасибо!»</p>
-  </blockquote>
-</section>
+  <!--  ── PAGES ────────────────────────────────────────────────────────── -->
+  <main>
+    <!-- 1. О нас -->
+    <section id="page-about" class="page visible">
+      <h2>О нас</h2>
+      <p>Blossom Boutique — крафтовая мастерская в Самаре. <br>
+         Мы создаём букеты только из отборных цветов, собранных с&nbsp;любовью.</p>
+      <p>💐 <b>12 000+</b> счастливых клиентов · <b>95 %</b> заказов день-в-день.</p>
+    </section>
 
-<section id="team">
-  <h2>Наша команда</h2>
-  <div class="cards">
-    <figure><img src="https://i.pravatar.cc/120?u=1" /><figcaption>Мария — ведущий флорист</figcaption></figure>
-    <figure><img src="https://i.pravatar.cc/120?u=2" /><figcaption>Евгений — курьер</figcaption></figure>
-    <figure><img src="https://i.pravatar.cc/120?u=3" /><figcaption>Людмила — декоратор</figcaption></figure>
-  </div>
-</section>
+    <!-- 2. Отзывы -->
+    <section id="page-reviews" class="page">
+      <h2>Отзывы</h2>
+      <article class="card">
+        <img src="https://i.pravatar.cc/64?u=anna" alt="">
+        <div><b>Анна</b><br>«Букет превзошёл ожидания! Курьер доставил вовремя»</div>
+      </article>
+      <article class="card">
+        <img src="https://i.pravatar.cc/64?u=oleg" alt="">
+        <div><b>Олег</b><br>«Заказывал маме на день рождения — она в восторге»</div>
+      </article>
+    </section>
 
-<section id="contacts">
-  <h2>Контакты</h2>
-  <p>🏬 Самара, ул. Цветочная, 15<br>
-     📞 +7 900 123-45-67<br>
-     ✉️ blossom@example.com</p>
-</section>
+    <!-- 3. Команда -->
+    <section id="page-team" class="page">
+      <h2>Наша команда</h2>
+      <div class="grid">
+        <figure><img src="https://i.pravatar.cc/120?u=1"><figcaption>Мария – флорист</figcaption></figure>
+        <figure><img src="https://i.pravatar.cc/120?u=2"><figcaption>Дмитрий – курьер</figcaption></figure>
+        <figure><img src="https://i.pravatar.cc/120?u=3"><figcaption>Екатерина – декоратор</figcaption></figure>
+      </div>
+    </section>
 
-<footer>© Blossom Boutique, 2025</footer>
+    <!-- 4. Контакты -->
+    <section id="page-contacts" class="page">
+      <h2>Контакты</h2>
+      <p>📍 г. Самара, ул. Новосадовая, 123<br>
+         🕒 09:00 – 21:00 ежедневно<br>
+         📞 +7 (846) 000-00-00</p>
+      <iframe
+        src="https://yandex.ru/map-widget/v1/?um=constructor%3A5d2ef4d1f4cb9928&scroll=true"
+        width="100%" height="240" allowfullscreen></iframe>
+    </section>
+  </main>
 
-<script type="module" src="flower3d.js"></script>
+  <footer>© 2005-2025 Blossom Boutique</footer>
 </body>
 </html>
