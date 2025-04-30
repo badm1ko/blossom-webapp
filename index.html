@@ -1,35 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Blossom Boutique</title>
-  <link rel="stylesheet" href="style.css"/>
-  <!-- three.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+<header>
+  <h1>Blossom Boutique</h1>
+  <p class="tag">Цветы, собранные с любовью</p>
+  <nav>
+    <a href="#about">О нас</a>
+    <a href="#reviews">Отзывы</a>
+    <a href="#team">Команда</a>
+    <a href="#contacts">Контакты</a>
+  </nav>
+</header>
+
+<!-- контейнер под 3-d сцену -->
+<section id="hero3d">
   <canvas id="flowerCanvas"></canvas>
+</section>
 
-  <header>
-      <h1 id="title">Blossom Boutique</h1>
-      <p id="slogan">Цветы, собранные с любовью</p>
-      <nav>
-        <button data-page="about">О нас</button>
-        <button data-page="reviews">Отзывы</button>
-        <button data-page="team">Команда</button>
-        <button data-page="contacts">Контакты</button>
-      </nav>
-  </header>
+<!-- остальной «визиточный» контент… -->
+<section id="about"><h2>О нас</h2> …</section>
+<section id="reviews"><h2>Отзывы</h2> …</section>
+<section id="team"><h2>Команда</h2> …</section>
+<section id="contacts"><h2>Контакты</h2> …</section>
 
-  <main id="page-container"><!-- контент подменяется JS --></main>
+<footer>© Blossom Boutique, 2025</footer>
 
-  <footer>
-      © Blossom Boutique, 2025
-  </footer>
-
-  <!-- Логика -->
-  <script src="flower3d.js"></script>
-  <script src="main.js"></script>
+<script type="module" src="flower3d.js"></script>
 </body>
 </html>
