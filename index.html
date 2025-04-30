@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blossom Boutique – витрина</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1 id="title">🌸 Blossom Boutique</h1>
+
+    <select id="lang">
+      <option value="ru">RU</option>
+      <option value="en">EN</option>
+    </select>
+
+    <button id="cartBtn"><span id="cartCount">0</span>🛒</button>
+  </header>
+
+  <!-- Блок фильтров -->
+  <section id="filters">
+    <input type="range" id="priceRange" min="0" max="10000" value="10000" />
+    <select id="colorFilter">
+      <option value="all">Все цвета</option>
+      <option value="red">Красный</option>
+      <option value="white">Белый</option>
+      <option value="mix">Микс</option>
+    </select>
+    <select id="occasionFilter">
+      <option value="all">Любой повод</option>
+      <option value="birthday">День рождения</option>
+      <option value="love">Любовь</option>
+      <option value="wedding">Свадьба</option>
+    </select>
+  </section>
+
+  <!-- Сетка карточек -->
+  <section id="grid"></section>
+
+  <!-- Конфигуратор -->
+  <section id="drawer" class="hidden">
+    <h2 id="drawerTitle"></h2>
+    <div id="drawerBody"></div>
+    <button id="addToCart">Добавить</button>
+  </section>
+
+  <!-- Корзина -->
+  <section id="cart" class="hidden">
+    <h2>🛍 Корзина</h2>
+    <ul id="cartList"></ul>
+
+    <div id="promoBlock">
+      <input id="promoInput" placeholder="Промокод" />
+      <button id="applyPromo">OK</button>
+    </div>
+
+    <p id="discountTimer" class="hidden"></p>
+    <p id="total">Итого: 0 ₽</p>
+
+    <button id="arBtn" class="hidden">👓 3-D / AR-превью</button>
+    <button id="checkout" disabled>Оплатить</button>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
