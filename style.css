@@ -1,24 +1,33 @@
-*{box-sizing:border-box;font-family:system-ui;}
-body{margin:0;padding:8px;background:#111;color:#eee;}
-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-header select,header button{background:#333;color:#eee;border:none;padding:4px;border-radius:4px;}
-#filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
-#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
-.card{background:#222;padding:6px;border-radius:6px;text-align:center;}
-.card img{width:100%;height:120px;object-fit:cover;border-radius:4px;}
-.card h4{margin:4px 0 2px;font-size:14px}
-.card small{display:block;margin-bottom:6px;color:#aaa}
-.card button{border:none;background:#ff4081;color:#fff;padding:4px 8px;border-radius:4px;cursor:pointer}
-dialog{border:none;border-radius:8px;padding:12px;background:#222;color:#eee;width:90vw;max-width:320px;}
-dialog::backdrop{background:rgba(0,0,0,.6);}
-#builder #stems span{display:inline-block;margin:2px;padding:2px 4px;background:#333;border-radius:4px}
-#cart-items div{display:flex;justify-content:space-between;margin:4px 0}
+/* Шрифт и тёмная тема совпадают со стандартным UI Telegram */
+:root{
+  --bg:#1e1e1e; --fg:#fff; --accent:#ff75b5; --card:#2a2a2a;
+}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);
+          font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+h1,h2{margin:0 0 12px}
+header{padding:12px 16px;background:#151515;position:sticky;top:0;z-index:2}
+#tabs{display:flex;gap:6px;margin-top:8px}
+#tabs button{flex:1;padding:6px;border:none;border-radius:6px;
+             background:var(--card);color:var(--fg);cursor:pointer}
+#tabs button.active{background:var(--accent);color:#000}
+main{padding:16px}
+section{max-width:680px;margin:auto}
 .hidden{display:none}
-#tabs{display:flex;gap:4px;justify-content:center;margin-top:8px}
-#tabs button{flex:1;border:none;padding:6px;background:#333;color:#fff;border-radius:4px}
-#rev-track{display:flex;overflow:hidden;width:100%;height:120px;position:relative}
-.review{min-width:100%;padding:8px;background:#222;border-radius:6px}
-#staff{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
-.staff-card{background:#222;padding:6px;border-radius:6px;text-align:center}
-.staff-card img{width:100%;border-radius:50%}
 
+/* отзывы */
+#rev-wrapper{overflow:hidden;border-radius:8px;background:var(--card)}
+#rev-track{display:flex;transition:.4s}
+.review{min-width:100%;padding:16px;box-sizing:border-box}
+.review blockquote{margin:0;font-size:1.1em;font-style:italic}
+.rev-nav{text-align:center;margin-top:6px}
+.rev-nav button{background:transparent;border:none;color:var(--accent);font-size:20px}
+
+/* команда */
+#staff{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.card{background:var(--card);border-radius:8px;padding:8px;text-align:center}
+.card img{width:80px;height:80px;object-fit:cover;border-radius:50%}
+
+/* контакты */
+iframe{width:100%;height:250px;border:none;border-radius:8px;margin-top:8px}
+
+footer{text-align:center;padding:8px 0;font-size:12px;color:#777}
