@@ -1,32 +1,40 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <title>Blossom Boutique</title>
 
   <!-- Стили -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
 
-  <!-- THREE.js из CDN -->
+  <!-- three.js + OrbitControls -->
   <script src="https://unpkg.com/three@0.159.0/build/three.min.js"></script>
-
-  <!-- OrbitControls, чтоб можно было повертеть мышкой (необязательно) -->
   <script src="https://unpkg.com/three@0.159.0/examples/js/controls/OrbitControls.js"></script>
 </head>
+
 <body>
-  <!-- ↓ 3-D canvas растянется на весь экран hero-блока -->
+  <!-- ========== HERO ========== -->
   <section id="hero">
     <canvas id="flowerCanvas"></canvas>
     <div class="overlay">
       <h1>Blossom Boutique</h1>
       <p>Цветы, собранные с любовью</p>
+
+      <!-- ↓ навигация по разделам -->
+      <nav>
+        <a href="#about">О нас</a>
+        <a href="#reviews">Отзывы</a>
+        <a href="#team">Команда</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
     </div>
   </section>
 
-  <!-- ↓ ниже идут остальные блоки (о нас, отзывы и т.д.) -->
-  <section id="about"> … </section>
-  <section id="team">  … </section>
-  <section id="reviews"> … </section>
+  <!-- ========== CONTENT ========== -->
+  <section id="about"><h2>О нас</h2><p>…</p></section>
+  <section id="reviews"><h2>Отзывы</h2><p>…</p></section>
+  <section id="team"><h2>Наша команда</h2><p>…</p></section>
+  <section id="contacts"><h2>Контакты</h2><p>…</p></section>
 
   <!-- Скрипты -->
   <script src="flower3d.js"></script>
