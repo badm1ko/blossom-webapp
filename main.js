@@ -60,7 +60,6 @@ modal.addEventListener("click",e=>{
   if(e.target===modal) modal.classList.add("hidden");
 });
 
-<script>
     document.addEventListener("DOMContentLoaded", () => {
       const track = document.querySelector(".slider-track");
       const cards = document.querySelectorAll(".slider-track .card");
@@ -89,5 +88,4 @@ modal.addEventListener("click",e=>{
         }
       });
     });
-  </script>
 
