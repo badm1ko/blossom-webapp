@@ -1,239 +1,147 @@
-/* === init === */
-const tg = window.Telegram.WebApp;
-tg.ready(); tg.expand();
-
-/* --- i18n ---------------------------------------------------------- */
-const tr = {
-  ru:{add:'Добавить',total:'Итого',pay:'Оплатить',empty:'Пусто',discount:'Скидка'},
-  en:{add:'Add',total:'Total',pay:'Pay',empty:'Empty',discount:'Discount'}
-};
-let lang = 'ru';
-document.getElementById('lang').onchange = e => {lang=e.target.value; redraw()};
-
-/* --- state --------------------------------------------------------- */
-let products = [];       // все товары
-let filtered = [];       // после фильтра
-let cart      = [];      // [{id, qty}]
-let promo     = null;    // {code, value}
-let discountDeadline = null;
-
-/* --- helpers ------------------------------------------------------- */
-const $ = q => document.querySelector(q);
-const format = n => new Intl.NumberFormat('ru-RU').format(n);
-
-/* --- load products ------------------------------------------------- */
-async function loadProducts(){
-  // ⚠ замените на real API
-  products = await (await fetch('products.json')).json();
-  filtered = [...products];
-  buildGrid();
-}
-loadProducts();
-
-/* --- build card grid ---------------------------------------------- */
-function buildGrid(){
-  const grid = $('#grid'); grid.innerHTML='';
-  filtered.forEach(p=>{
-    const card = document.createElement('div');
-    card.className='card'; card.dataset.id=p.id;
-    card.innerHTML=`<img src="${p.image_url}"><h3>${p.name}</h3><p>${format(p.price)} ₽</p>`;
-    card.onclick = () => openConfigurator(p);
-    grid.append(card);
-  });
-}
-
-/* --- filters ------------------------------------------------------- */
-$('#priceRange').oninput = ()=>applyFilters();
-$('#colorFilter').onchange = ()=>applyFilters();
-$('#occasionFilter').onchange = ()=>applyFilters();
-
-function applyFilters(){
-  const maxPrice = +$('#priceRange').value;
-  const color = $('#colorFilter').value;
-  const occ   = $('#occasionFilter').value;
-
-  filtered = products.filter(p=>{
-    const okPrice = p.price<=maxPrice;
-    const okColor = color==='all'||p.color===color;
-    const okOcc   = occ==='all'  ||p.occasion===occ;
-    return okPrice&&okColor&&okOcc;
-  });
-  buildGrid();
-}
-
-/* --- configurator drawer ------------------------------------------ */
-function openConfigurator(prod){
-  $('#drawerTitle').innerText=prod.name;
-  $('#drawerBody').innerHTML=`
-      <p>${prod.description || ''}</p>
-      <label>Кол-во: <input id="qty" type="number" min="1" value="1"></label>`;
-  $('#drawer').classList.remove('hidden');
-
-  $('#addToCart').onclick = ()=>{
-    const qty = +$('#qty').value||1;
-    cart.push({id:prod.id,qty});
-    updateCartCount();
-    $('#drawer').classList.add('hidden');
-  };
-}
-
-/* --- cart ---------------------------------------------------------- */
-$('#cartBtn').onclick  = ()=>showCart();
-$('#checkout').onclick = sendToBot;
-$('#applyPromo').onclick = applyPromo;
-
-function updateCartCount(){
-  $('#cartCount').innerText = cart.reduce((s,i)=>s+i.qty,0);
-}
-function showCart(){
-  const cartSec=$('#cart'); cartSec.classList.toggle('hidden');
-  const list=$('#cartList'); list.innerHTML='';
-
-  if(!cart.length){list.innerHTML=`<li>${tr[lang].empty}</li>`; return;}
-
-  cart.forEach(it=>{
-    const prod = products.find(p=>p.id===it.id);
-    const li=document.createElement('li');
-    li.innerText=`${prod.name} ×${it.qty} — ${format(prod.price*it.qty)} ₽`;
-    list.append(li);
-  });
-
-  // скидка таймер
-  if(!discountDeadline){
-    discountDeadline = Date.now()+ 5*60*1000;   // 5 минут
-    $('#discountTimer').classList.remove('hidden');
-    tickTimer();
-  }
-
-  calcTotal();
-}
-// app.js (фрагмент)
+// --- глобальные переменные -----------------------------------------
 let products = [];
-let filtered = [];
+let filtered  = [];
+let cart      = [];
+let promoActive = false;
 
-async function init() {
+// ---------- helpers -------------------------------------------------
+const $ = s => document.querySelector(s);
+function format(n){return n.toLocaleString('ru-RU');}
+
+// ---------- инициализация ------------------------------------------
+async function init(){
   products = await (await fetch('products.json')).json();
   filtered = [...products];
+  fillFlowerSelect();
   renderList();
 }
+window.addEventListener('DOMContentLoaded',init);
 
-document.querySelector('#search').oninput = e => {
-  const q = e.target.value.toLowerCase();
-  filtered = products.filter(p => p.name.toLowerCase().includes(q));
-  renderList();
-};
-
-document.querySelector('#sort').onchange = e => {
-  const v = e.target.value;
-  filtered.sort((a, b) => {
-    if (v === 'name')        return a.name.localeCompare(b.name);
-    if (v === 'price_asc')   return a.price - b.price;
-    if (v === 'price_desc')  return b.price - a.price;
-  });
-  renderList();
-};
-
-/* таймер скидки */
-function tickTimer(){
-  const remain = discountDeadline - Date.now();
-  if(remain<=0){ $('#discountTimer').classList.add('hidden'); return;}
-  const m = String(Math.floor(remain/60000)).padStart(2,'0');
-  const s = String(Math.floor(remain/1000)%60).padStart(2,'0');
-  $('#discountTimer').innerText=`${tr[lang].discount}: 5% (${m}:${s})`;
-  setTimeout(tickTimer,1000);
-}
-/* промокод */
-function applyPromo(){
-  const code = $('#promoInput').value.trim().toUpperCase();
-  if(code==='FLOWER10'){ promo={code,value:10}; }
-  calcTotal();
-}
-let promoActive = false;
-document.getElementById('btn-promo').onclick = ()=>{
-  const code = document.getElementById('promo').value.trim();
-  if(code.toLowerCase()==='spring10'){
-    promoActive = true;
-    document.getElementById('promo-ok').hidden=false;
-    startTimer(900); // 15 минут
-    updateCart();    // пересчитать цены
-  }else alert('Неверный код');
-};
-
-function startTimer(sec){
-  const t = document.getElementById('timer');
-  t.hidden=false;
-  const int = setInterval(()=>{
-     const m = Math.floor(sec/60).toString().padStart(2,'0');
-     const s = (sec%60).toString().padStart(2,'0');
-     t.textContent = `Скидка действует ${m}:${s}`;
-     if(--sec<0){clearInterval(int);promoActive=false;updateCart();t.hidden=true;}
-  },1000);
-}
-['flt-color','flt-occ'].forEach(id=>{
-  document.getElementById(id).onchange = doFilter;
-});
-function doFilter() {
-  const c  = document.getElementById('flt-color').value;
-  const oc = document.getElementById('flt-occ').value;
-  filtered = products.filter(p =>
-      (!c  || p.color===c) &&
-      (!oc || p.occasion===oc)
-  );
-  renderList();
-}
-
-/* вычисление суммы */
-function calcTotal(){
-  let total = cart.reduce((s,i)=>{
-    const p = products.find(p=>p.id===i.id); return s+p.price*i.qty;
-  },0);
-  if(discountDeadline && Date.now()<discountDeadline) total*=.95;
-  if(promo) total*=1-promo.value/100;
-  $('#total').innerText=`${tr[lang].total}: ${format(Math.round(total))} ₽`;
-  $('#checkout').disabled=false;
-}
-const i18n = {
-  ru:{title:"Blossom Boutique", cart:"Корзина"},
-  en:{title:"Blossom Boutique", cart:"Cart"}
-};
-document.getElementById('lang').onchange = e=>{
-  const L = e.target.value;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-       el.textContent = i18n[L][el.dataset.i18n];
-  });
-};
-
-/* --- AR preview ---------------------------------------------------- */
-if(navigator.xr || navigator.userAgent.includes('ARCore')){
-  $('#arBtn').classList.remove('hidden');
-  $('#arBtn').onclick = ()=>alert('Открываем WebXR… (demo)');
-}
-
-/* --- отправка данных в бот ---------------------------------------- */
-function sendToBot(){
-  tg.sendData(JSON.stringify({cart,promo}));
-  tg.close();
-}
-
-/* --- локализация текста ------------------------------------------- */
-function redraw(){
-  $('#checkout').innerText = tr[lang].pay;
-  calcTotal();
-}
-
+// ---------- рендер карточек ----------------------------------------
 function renderList(){
-  const root = document.getElementById('list');
+  const root = $('#list');
   root.innerHTML='';
   filtered.forEach(p=>{
-     const div = document.createElement('div');
-     div.className='card';
-     div.innerHTML = `
-        <img src="${p.image}" />
-        <h4>${p.name}</h4>
-        <small>${p.price} ₽</small>
-        <button data-id="${p.id}">🛒</button>
-     `;
-     root.append(div);
+    const d=document.createElement('div');
+    d.className='card';
+    d.innerHTML=`
+      <img src="${p.image}" />
+      <h4>${p.name}</h4>
+      <small>${format(p.price)} ₽</small>
+      <button data-id="${p.id}">🛒</button>`;
+    d.querySelector('button').onclick=e=>addToCart(p.id);
+    root.append(d);
   });
 }
 
+// ---------- фильтры -------------------------------------------------
+$('#search').oninput = e=>{
+  const q=e.target.value.toLowerCase();
+  filtered = products.filter(p=>p.name.toLowerCase().includes(q));
+  applyExtraFilters(); renderList();
+};
+$('#sort').onchange = applySort;
+['#flt-color','#flt-occ','#price'].forEach(id=>$(id).onchange=applyExtraFilters);
+
+function applyExtraFilters(){
+  const col=$('#flt-color').value;
+  const oc=$('#flt-occ').value;
+  const max=+$('#price').value;
+  $('#price-val').textContent=`≤ ${max} ₽`;
+
+  filtered = filtered.filter(p=>
+    (!col||p.color===col)&&(!oc||p.occasion===oc)&&p.price<=max
+  );
+}
+function applySort(){
+  const v=$('#sort').value;
+  filtered.sort((a,b)=>{
+    if(v==='name') return a.name.localeCompare(b.name);
+    if(v==='price_asc') return a.price-b.price;
+    if(v==='price_desc')return b.price-a.price;
+  });
+  renderList();
+}
+
+// ---------- корзина -------------------------------------------------
+function addToCart(id,qty=1){
+  const i=cart.findIndex(c=>c.id===id);
+  i>-1?cart[i].qty+=qty:cart.push({id,qty});
+  $('#cart-count').textContent=cart.reduce((s,i)=>s+i.qty,0);
+}
+$('#btn-cart').onclick=()=>showCart();
+$('#cart-close').onclick=()=>$('#cart').close();
+
+function showCart(){
+  const block = $('#cart-items');
+  block.innerHTML='';
+  let sum=0;
+  cart.forEach(item=>{
+    const p=products.find(x=>x.id===item.id);
+    const line=p.price*item.qty;
+    sum+=line;
+    const d=document.createElement('div');
+    d.innerHTML=`${p.name} ×${item.qty}<b>${format(line)} ₽</b>`;
+    block.append(d);
+  });
+  if(promoActive) sum*=.9;
+  $('#cart-sum').textContent=format(sum);
+  $('#cart').showModal();
+}
+
+// ---------- промокод + таймер --------------------------------------
+$('#btn-promo').onclick=()=>{
+  const code=$('#promo').value.trim().toLowerCase();
+  if(code==='spring10'&&!promoActive){
+     promoActive=true; $('#promo-ok').hidden=false;
+     startTimer(900); showCart();
+  }else alert('Неверный код.');
+};
+function startTimer(sec){
+  const t=$('#timer'); t.hidden=false;
+  const int=setInterval(()=>{
+    const m=String(Math.floor(sec/60)).padStart(2,'0');
+    const s=String(sec%60).padStart(2,'0');
+    t.textContent=`Скидка действует ${m}:${s}`;
+    if(--sec<0){clearInterval(int);promoActive=false;$('#promo-ok').hidden=true;t.hidden=true;showCart();}
+  },1000);
+}
+
+// ---------- конструктор букета -------------------------------------
+function fillFlowerSelect(){
+  const sel=$('#flower');
+  const unique = [...new Set(products.map(p=>p.name))];
+  unique.forEach(n=>{
+    sel.add(new Option(n,n));
+  });
+}
+$('#add').onclick=()=>{
+  const name=$('#flower').value;
+  const pr=products.find(p=>p.name===name).price;
+  const span=document.createElement('span');
+  span.textContent=`${name} (${pr}₽)`;
+  span.onclick=()=>span.remove(),updateSum();
+  $('#stems').append(span); updateSum();
+};
+function updateSum(){
+  let s=0;
+  $('#stems').querySelectorAll('span').forEach(sp=>{
+    const n=sp.textContent.match(/\((\d+)/)[1];
+    s+=+n;
+  });
+  $('#sum').textContent=format(s);
+}
+$('#addToCart').onclick=()=>{
+  addToCart(999,1); // id 999 = кастомный
+  $('#builder').close();
+};
+$('#close').onclick=()=>$('#builder').close();
+
+// ---------- мультиязычность ---------------------------------------
+const i18n={ru:{title:"Blossom Boutique",cart:"Корзина"},en:{title:"Blossom Boutique",cart:"Cart"}};
+$('#lang').onchange=e=>{
+  const L=e.target.value;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    el.textContent=i18n[L][el.dataset.i18n];
+  });
+};
