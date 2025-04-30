@@ -1,54 +1,83 @@
-/*  Simple “flying petals” scene  */
+/*  Реалистичные «лепестки» с InstancedMesh  */
 (() => {
-  const canvas  = document.getElementById("flowerCanvas");
-  const scene   = new THREE.Scene();
-  const camera  = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.z = 7;
+  const canvas = document.getElementById("flowerCanvas");
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  /* ----- сцена ----- */
+  const scene   = new THREE.Scene();
+  const camera  = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.z = 8;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  /* ---------- свет ---------- */
-  const ambient = new THREE.AmbientLight(0xffffff, 1.2);
-  scene.add(ambient);
+  /* ----- свет ----- */
+  scene.add(new THREE.AmbientLight(0xffffff, 1.1));
 
-  /* ---------- “букет” ---------- */
-  const petals = new THREE.Group();
-  scene.add(petals);
+  /* ----- загружаем текстуру лепестка ----- */
+  const loader  = new THREE.TextureLoader();
+  loader.load("petal.png", texture => {
+    texture.flipY = false;
 
-  const geo   = new THREE.SphereGeometry(0.12, 12, 12);  // маленький лепесток-шар
-  const mat   = new THREE.MeshStandardMaterial({ color: 0xff6ba0 });
+    /* геометрия — плоская плоскость 1×1, потом будем масштабировать */
+    const geo = new THREE.PlaneGeometry(1, 1);
+    /* материал с прозрачностью + двойная сторона */
+    const mat = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      depthWrite:false,
+      side: THREE.DoubleSide
+    });
 
-  for (let i = 0; i < 250; i++) {
-    const m = new THREE.Mesh(geo, mat.clone());
-    const radius = 2 + Math.random() * 3;
-    const phi = Math.random() * Math.PI * 2;
-    const theta = Math.acos(THREE.MathUtils.randFloatSpread(2)); // равномерно по сфере
-    m.position.setFromSphericalCoords(radius, theta, phi);
-    m.material.color.offsetHSL(0, THREE.MathUtils.randFloat(-0.05, 0.05), THREE.MathUtils.randFloat(-0.1, 0.1));
-    petals.add(m);
-  }
+    /* InstancedMesh: один материал / геом., много копий на GPU */
+    const COUNT = 450;
+    const petals = new THREE.InstancedMesh(geo, mat, COUNT);
+    scene.add(petals);
 
-  /* ---------- анимация ---------- */
-  function animate() {
-    requestAnimationFrame(animate);
-    petals.rotation.y += 0.0008;
-    petals.rotation.x += 0.0004;
-    renderer.render(scene, camera);
-  }
-  animate();
+    const dummy = new THREE.Object3D();
+    for (let i = 0; i < COUNT; i++) {
+      const radius = THREE.MathUtils.randFloat(2, 4.5);
+      const phi = Math.random() * Math.PI * 2;
+      const theta = Math.acos(THREE.MathUtils.randFloatSpread(2));
 
-  /* ---------- адаптив ---------- */
+      dummy.position.setFromSphericalCoords(radius, theta, phi);
+      dummy.rotation.set(
+        THREE.MathUtils.randFloat(0, Math.PI),
+        THREE.MathUtils.randFloat(0, Math.PI),
+        THREE.MathUtils.randFloat(0, Math.PI)
+      );
+      const scale = THREE.MathUtils.randFloat(0.4, 0.9);
+      dummy.scale.set(scale, scale, scale);
+      dummy.updateMatrix();
+      petals.setMatrixAt(i, dummy.matrix);
+    }
+    petals.instanceMatrix.needsUpdate = true;
+
+    /* анимация */
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const t = clock.getElapsedTime();
+      // лёгкое дыхание
+      petals.rotation.y = t * 0.05;
+      petals.rotation.x = Math.sin(t * 0.3) * 0.15;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  });
+
+  /* ----- адаптив ----- */
   window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  /* (необязательно) дать пользователю покрутить */
+  /* OrbitControls (по желанию) */
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableZoom = false;
-  controls.enablePan  = false;
-  controls.autoRotate = false;
+  controls.enableZoom  = false;
+  controls.enablePan   = false;
+  controls.autoRotate  = false;
 })();
