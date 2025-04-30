@@ -1,83 +1,65 @@
-/*  Реалистичные «лепестки» с InstancedMesh  */
-(() => {
-  const canvas = document.getElementById("flowerCanvas");
+// ⚙️ эта строка → появится в консоли, означает «скрипт подгрузился»
+console.log("⚙️ flower3d.js loaded");
 
-  /* ----- сцена ----- */
-  const scene   = new THREE.Scene();
-  const camera  = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 100);
-  camera.position.z = 8;
+const canvas = document.getElementById("flowerCanvas");
+const scene   = new THREE.Scene();
+const camera  = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, .1, 1000);
+camera.position.z = 5;
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha:true });
+renderer.setPixelRatio(devicePixelRatio);
+renderer.setSize(innerWidth, innerHeight);
 
-  /* ----- свет ----- */
-  scene.add(new THREE.AmbientLight(0xffffff, 1.1));
+// ­— свет
+scene.add(new THREE.AmbientLight(0xffffff, 1.1));
 
-  /* ----- загружаем текстуру лепестка ----- */
-  const loader  = new THREE.TextureLoader();
-  loader.load("petal.png", texture => {
-    texture.flipY = false;
+// ­— один материал с текстурой лепестка
+const texLoader = new THREE.TextureLoader();
+texLoader.load("petal.png", texture => {
+    const geometry = new THREE.PlaneGeometry(.5,.7);
+    const material = new THREE.MeshBasicMaterial({ map:texture, transparent:true, side:THREE.DoubleSide });
 
-    /* геометрия — плоская плоскость 1×1, потом будем масштабировать */
-    const geo = new THREE.PlaneGeometry(1, 1);
-    /* материал с прозрачностью + двойная сторона */
-    const mat = new THREE.MeshBasicMaterial({
-      map: texture,
-      transparent: true,
-      depthWrite:false,
-      side: THREE.DoubleSide
-    });
-
-    /* InstancedMesh: один материал / геом., много копий на GPU */
-    const COUNT = 450;
-    const petals = new THREE.InstancedMesh(geo, mat, COUNT);
-    scene.add(petals);
-
-    const dummy = new THREE.Object3D();
-    for (let i = 0; i < COUNT; i++) {
-      const radius = THREE.MathUtils.randFloat(2, 4.5);
-      const phi = Math.random() * Math.PI * 2;
-      const theta = Math.acos(THREE.MathUtils.randFloatSpread(2));
-
-      dummy.position.setFromSphericalCoords(radius, theta, phi);
-      dummy.rotation.set(
-        THREE.MathUtils.randFloat(0, Math.PI),
-        THREE.MathUtils.randFloat(0, Math.PI),
-        THREE.MathUtils.randFloat(0, Math.PI)
-      );
-      const scale = THREE.MathUtils.randFloat(0.4, 0.9);
-      dummy.scale.set(scale, scale, scale);
-      dummy.updateMatrix();
-      petals.setMatrixAt(i, dummy.matrix);
+    const petals = [];
+    for(let i=0;i<120;i++){
+        const mesh = new THREE.Mesh(geometry, material);
+        resetPetal(mesh, true);
+        scene.add(mesh);
+        petals.push(mesh);
     }
-    petals.instanceMatrix.needsUpdate = true;
 
-    /* анимация */
-    const clock = new THREE.Clock();
-    function animate() {
-      requestAnimationFrame(animate);
+    // ­— анимация
+    function animate(){
+        requestAnimationFrame(animate);
+        petals.forEach(p=>{
+            p.rotation.z += 0.01;
+            p.position.y -= 0.02 + p.userData.speed;
+            p.position.x += Math.sin(Date.now()*0.001+p.userData.offset)*0.005;
 
-      const t = clock.getElapsedTime();
-      // лёгкое дыхание
-      petals.rotation.y = t * 0.05;
-      petals.rotation.x = Math.sin(t * 0.3) * 0.15;
-
-      renderer.render(scene, camera);
+            if(p.position.y < -4) resetPetal(p,false);
+        });
+        renderer.render(scene, camera);
     }
     animate();
-  });
 
-  /* ----- адаптив ----- */
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    function resetPetal(mesh,init){
+        mesh.position.set(
+            THREE.MathUtils.randFloatSpread(8),
+            init? THREE.MathUtils.randFloat(1,4) : THREE.MathUtils.randFloat(4,6),
+            THREE.MathUtils.randFloatSpread(2)
+        );
+        mesh.rotation.set(
+            0,
+            0,
+            THREE.MathUtils.degToRad(Math.random()*360)
+        );
+        mesh.userData.speed  = Math.random()*0.02;
+        mesh.userData.offset = Math.random()*Math.PI*2;
+    }
+});
+
+// ­— адаптив
+addEventListener("resize",()=>{
+    camera.aspect = innerWidth/innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  /* OrbitControls (по желанию) */
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableZoom  = false;
-  controls.enablePan   = false;
-  controls.autoRotate  = false;
-})();
+    renderer.setSize(innerWidth, innerHeight);
+});
