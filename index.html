@@ -37,8 +37,40 @@
     </select>
   </section>
 
+  <select id="flt-color">
+  <option value="">Все цвета</option>
+  <option value="красный">Красный</option> …
+</select>
+<select id="flt-occ">
+  <option value="">Любой повод</option>
+  <option value="свадьба">Свадьба</option> …
+</select>
+
   <!-- Сетка карточек -->
   <section id="grid"></section>
+
+  <input id="promo" placeholder="Введите промокод" />
+  <button id="btn-promo">OK</button>
+  <span id="promo-ok" hidden>✔ -10 %</span>
+  <div id="timer" hidden></div>
+  
+  <select id="lang">
+    <option value="ru">RU</option>
+    <option value="en">EN</option>
+  </select>
+  <span data-i18n="title">Blossom Boutique</span>
+  
+  <div id="builder" class="modal">
+  <h3>Ваш букет</h3>
+  <div id="stems"></div>
+  <select id="flower">
+     <option value="rose" data-price="200">🌹 Роза 200₽</option> …
+  </select>
+  <button id="add">Добавить стебель</button>
+  <hr>
+  Итого: <span id="sum">0</span> ₽
+  <button id="addToCart">В корзину</button>
+</div>
 
   <!-- Конфигуратор -->
   <section id="drawer" class="hidden">
@@ -46,6 +78,13 @@
     <div id="drawerBody"></div>
     <button id="addToCart">Добавить</button>
   </section>
+
+  <input id="search"  placeholder="Поиск…" />
+<select id="sort">
+   <option value="name">Название</option>
+   <option value="price_asc">Цена ↑</option>
+   <option value="price_desc">Цена ↓</option>
+</select>
 
   <!-- Корзина -->
   <section id="cart" class="hidden">
