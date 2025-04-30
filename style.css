@@ -56,3 +56,22 @@ footer{text-align:center;padding:8px 0;font-size:12px;color:#777}
 }
 #hero h1{font-size:3rem;margin:0}
 #hero p {font-size:1.3rem;margin:0.5rem 0 0}
+#hero{position:relative;height:100vh;overflow:hidden;background:#101012}
+#flowerCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#hero .overlay{position:relative;z-index:10;text-align:center;color:#fff;top:42%;transform:translateY(-42%)}
+#hero h1{font-size:3.2rem;margin:0;font-weight:700;letter-spacing:2px}
+#hero p {font-size:1.25rem;margin:.7rem 0 1.5rem}
+
+#hero nav a{
+  color:#fff;text-decoration:none;margin:0 .8rem;font-weight:500;
+  transition:opacity .25s;
+}
+#hero nav a:hover{opacity:.75}
+
+/* базовые отступы контента */
+section{padding:4rem 1.2rem;max-width:920px;margin:0 auto;color:#222;font-family:system-ui}
+section h2{margin-top:0}
+
+/* плавный скролл */
+html{scroll-behavior:smooth}
+
