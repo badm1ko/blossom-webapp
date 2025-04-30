@@ -59,3 +59,34 @@ document.querySelectorAll(".team-grid figure").forEach(fig=>{
 modal.addEventListener("click",e=>{
   if(e.target===modal) modal.classList.add("hidden");
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const track = document.querySelector(".slider-track");
+  const cards = document.querySelectorAll(".slider-track .card");
+  const btnPrev = document.querySelector(".slider-btn.prev");
+  const btnNext = document.querySelector(".slider-btn.next");
+
+  const cardsPerPage = 3;
+  let currentSlide = 0;
+  const totalSlides = Math.ceil(cards.length / cardsPerPage);
+
+  function updateSlider() {
+    const offset = currentSlide * cardsPerPage * cards[0].offsetWidth;
+    track.style.transform = `translateX(-${offset}px)`;
+  }
+
+  btnPrev.addEventListener("click", () => {
+    if (currentSlide > 0) {
+      currentSlide--;
+      updateSlider();
+    }
+  });
+
+  btnNext.addEventListener("click", () => {
+    if (currentSlide < totalSlides - 1) {
+      currentSlide++;
+      updateSlider();
+    }
+  });
+});
+
