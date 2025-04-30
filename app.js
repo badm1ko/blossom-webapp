@@ -145,3 +145,50 @@ $('#lang').onchange=e=>{
     el.textContent=i18n[L][el.dataset.i18n];
   });
 };
+const reviews = [
+  {user:"Мария",text:"💐 Самые свежие цветы!"},
+  {user:"Олег", text:"Быстрая доставка, спасибо!"}
+];
+const team = [
+  {name:"Елена",role:"Флорист",photo:"avatars/elena.jpg"},
+  {name:"Артём",role:"Курьер", photo:"avatars/artyom.jpg"}
+];
+const aboutRU = `
+<h3>О Blossom Boutique</h3>
+<p>Мы делаем букеты с 2005 года…</p>
+`;
+
+// ---------- вкладки ------------------------------------------------
+document.querySelectorAll('#tabs button').forEach(btn=>{
+  btn.onclick = ()=>switchTab(btn.dataset.tab);
+});
+function switchTab(id){
+  document.querySelectorAll('main,#reviews,#viewer,#team,#about')
+    .forEach(el=>el.classList.add('hidden'));
+  (id==='list'?$('#list'):$('#'+id)).classList.remove('hidden');
+}
+
+// ---------- отзывы -------------------------------------------------
+reviews.forEach(r=>{
+  const div=document.createElement('div');
+  div.className='review';
+  div.innerHTML=`<b>${r.user}</b><br>${r.text}`;
+  $('#rev-track').append(div);
+});
+let idx=0;
+function showReview(i){
+  $('#rev-track').style.transform=`translateX(${-i*100}%)`;
+}
+$('#prev').onclick=()=>{idx=(idx-1+reviews.length)%reviews.length;showReview(idx);}
+$('#next').onclick=()=>{idx=(idx+1)%reviews.length;showReview(idx);}
+
+// ---------- команда ------------------------------------------------
+team.forEach(m=>{
+  const d=document.createElement('div');
+  d.className='staff-card';
+  d.innerHTML=`<img src="${m.photo}"><br><b>${m.name}</b><br><small>${m.role}</small>`;
+  $('#staff').append(d);
+});
+
+// ---------- страница About ----------------------------------------
+$('#about').innerHTML = aboutRU;
