@@ -45,10 +45,6 @@
     <section id="page-reviews" class="page">
       <h2>Отзывы</h2>
       <div class="review-list">
-        <!-- 15 карточек -->
-        <!-- карточки генерировать не стали, просто вставили -->
-        <!-- для примера берём pravatar.cc -->
-        <!-- 1-5 -->
         <article class="card"><img src="https://i.pravatar.cc/72?u=1">
           <div><b>Анна</b><br>«Букет превзошёл ожидания! Курьер доставил точно ко времени»</div></article>
         <article class="card"><img src="https://i.pravatar.cc/72?u=2">
@@ -83,7 +79,29 @@
           <div><b>Максим</b><br>«Никаких скрытых доплат, всё прозрачно. Молодцы!»</div></article>
       </div>
     </section>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const track = document.querySelector(".slider-track");
+    const cards = document.querySelectorAll(".slider-track .card");
+    const btnPrev = document.querySelector(".slider-btn.prev");
+    const btnNext = document.querySelector(".slider-btn.next");
+    let current = 0;
 
+    function updateSlider() {
+      track.style.transform = `translateX(-${current * 100}%)`;
+    }
+
+    btnPrev.addEventListener("click", () => {
+      if (current > 0) current--;
+      updateSlider();
+    });
+
+    btnNext.addEventListener("click", () => {
+      if (current < cards.length - 1) current++;
+      updateSlider();
+    });
+  });
+</script>
     <!----- 3. КОМАНДА -->
     <section id="page-team" class="page">
       <h2>Команда</h2>
