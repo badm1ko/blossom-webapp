@@ -15,7 +15,8 @@ scene.add(new THREE.AmbientLight(0xffffff, 1.1));
 
 // ­— один материал с текстурой лепестка
 const texLoader = new THREE.TextureLoader();
-texLoader.load("petal.png", texture => {
+const base     = import.meta.url.replace("flower3d.js", "");
+const petalTex = loader.load(base + "petal.png"); {
     const geometry = new THREE.PlaneGeometry(.5,.7);
     const material = new THREE.MeshBasicMaterial({ map:texture, transparent:true, side:THREE.DoubleSide });
 
