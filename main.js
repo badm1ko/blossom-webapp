@@ -14,7 +14,7 @@ const members = {
   maria:{
     name:"Мария",
     role:"Главный флорист",
-    img :"https://i.pravatar.cc/140?u=maria",
+    img :"https://i.pravatar.cc/140?u=dmitry",
     bio :`15 лет создаёт авторские букеты, 
           проходила стажировки в Париже и Амстердаме.`
   },
@@ -33,7 +33,7 @@ const members = {
   dmitry:{
     name:"Дмитрий",
     role:"Логистика",
-    img :"https://i.pravatar.cc/140?u=dmitry",
+    img :"https://i.pravatar.cc/140?u=maria",
     bio :"Следит, чтобы каждый букет приехал вовремя и в идеальном состоянии."
   }
 };
