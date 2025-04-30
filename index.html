@@ -1,74 +1,35 @@
-<!doctype html>
-<html lang="ru" data-theme="dark">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8" />
   <title>Blossom Boutique</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="style.css" rel="stylesheet"/>
-  <!-- model-viewer для 3-D/AR, если решите добавить позже -->
-  <script defer src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- THREE.js из CDN -->
+  <script src="https://unpkg.com/three@0.159.0/build/three.min.js"></script>
+
+  <!-- OrbitControls, чтоб можно было повертеть мышкой (необязательно) -->
+  <script src="https://unpkg.com/three@0.159.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
-  <header>
-    <h1>🌸 Blossom Boutique</h1>
-    <nav id="tabs">
-      <button data-tab="about">О&nbsp;нас</button>
-      <button data-tab="reviews">Отзывы</button>
-      <button data-tab="team">Команда</button>
-      <button data-tab="contacts">Контакты</button>
-    </nav>
-  </header>
+  <!-- ↓ 3-D canvas растянется на весь экран hero-блока -->
+  <section id="hero">
+    <canvas id="flowerCanvas"></canvas>
+    <div class="overlay">
+      <h1>Blossom Boutique</h1>
+      <p>Цветы, собранные с любовью</p>
+    </div>
+  </section>
 
-  <main>
-    <!-- О нас -->
-    <section id="about">
-      <h2>О&nbsp;нас</h2>
-      <p>Blossom Boutique — салон авторской флористики в Самаре с&nbsp;2005&nbsp;года.
-         Мы верим, что каждый букет — это отдельная история; подбираем свежайшие
-         цветы, дизайнерскую упаковку и доставляем в точное время.</p>
-      <p><strong>Почему мы:</strong></p>
-      <ul>
-        <li>🌿&nbsp;Только свежие цветы от&nbsp;проверенных поставщиков</li>
-        <li>🎨&nbsp;Собственная студия дизайна</li>
-        <li>🚚&nbsp;Доставка по&nbsp;городу за&nbsp;2&nbsp;часа</li>
-        <li>💳&nbsp;Оплата любым удобным способом</li>
-      </ul>
-    </section>
+  <!-- ↓ ниже идут остальные блоки (о нас, отзывы и т.д.) -->
+  <section id="about"> … </section>
+  <section id="team">  … </section>
+  <section id="reviews"> … </section>
 
-    <!-- Отзывы -->
-    <section id="reviews" class="hidden">
-      <h2>Отзывы</h2>
-      <div id="rev-wrapper">
-        <div id="rev-track"></div>
-      </div>
-      <div class="rev-nav">
-        <button id="rev-prev">◀</button>
-        <button id="rev-next">▶</button>
-      </div>
-    </section>
-
-    <!-- Команда -->
-    <section id="team" class="hidden">
-      <h2>Наша команда</h2>
-      <div id="staff"></div>
-    </section>
-
-    <!-- Контакты -->
-    <section id="contacts" class="hidden">
-      <h2>Контакты</h2>
-      <p>📍 г.&nbsp;Самара, ул.&nbsp;Новосадовая, 123<br>
-         🕑 09:00 – 21:00 ежедневно<br>
-         ☎️ +7&nbsp;(846)&nbsp;000-00-00</p>
-      <iframe
-        src="https://yandex.ru/map-widget/v1/?um=constructor%3A0bb9bf…"
-        loading="lazy"></iframe>
-    </section>
-  </main>
-
-  <footer>
-    © 2005-2025 Blossom Boutique
-  </footer>
-
-  <script defer src="app.js"></script>
+  <!-- Скрипты -->
+  <script src="flower3d.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
