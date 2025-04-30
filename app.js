@@ -107,6 +107,32 @@ function showCart(){
 
   calcTotal();
 }
+// app.js (фрагмент)
+let products = [];
+let filtered = [];
+
+async function init() {
+  products = await (await fetch('products.json')).json();
+  filtered = [...products];
+  renderList();
+}
+
+document.querySelector('#search').oninput = e => {
+  const q = e.target.value.toLowerCase();
+  filtered = products.filter(p => p.name.toLowerCase().includes(q));
+  renderList();
+};
+
+document.querySelector('#sort').onchange = e => {
+  const v = e.target.value;
+  filtered.sort((a, b) => {
+    if (v === 'name')        return a.name.localeCompare(b.name);
+    if (v === 'price_asc')   return a.price - b.price;
+    if (v === 'price_desc')  return b.price - a.price;
+  });
+  renderList();
+};
+
 /* таймер скидки */
 function tickTimer(){
   const remain = discountDeadline - Date.now();
@@ -122,6 +148,40 @@ function applyPromo(){
   if(code==='FLOWER10'){ promo={code,value:10}; }
   calcTotal();
 }
+let promoActive = false;
+document.getElementById('btn-promo').onclick = ()=>{
+  const code = document.getElementById('promo').value.trim();
+  if(code.toLowerCase()==='spring10'){
+    promoActive = true;
+    document.getElementById('promo-ok').hidden=false;
+    startTimer(900); // 15 минут
+    updateCart();    // пересчитать цены
+  }else alert('Неверный код');
+};
+
+function startTimer(sec){
+  const t = document.getElementById('timer');
+  t.hidden=false;
+  const int = setInterval(()=>{
+     const m = Math.floor(sec/60).toString().padStart(2,'0');
+     const s = (sec%60).toString().padStart(2,'0');
+     t.textContent = `Скидка действует ${m}:${s}`;
+     if(--sec<0){clearInterval(int);promoActive=false;updateCart();t.hidden=true;}
+  },1000);
+}
+['flt-color','flt-occ'].forEach(id=>{
+  document.getElementById(id).onchange = doFilter;
+});
+function doFilter() {
+  const c  = document.getElementById('flt-color').value;
+  const oc = document.getElementById('flt-occ').value;
+  filtered = products.filter(p =>
+      (!c  || p.color===c) &&
+      (!oc || p.occasion===oc)
+  );
+  renderList();
+}
+
 /* вычисление суммы */
 function calcTotal(){
   let total = cart.reduce((s,i)=>{
@@ -132,6 +192,16 @@ function calcTotal(){
   $('#total').innerText=`${tr[lang].total}: ${format(Math.round(total))} ₽`;
   $('#checkout').disabled=false;
 }
+const i18n = {
+  ru:{title:"Blossom Boutique", cart:"Корзина"},
+  en:{title:"Blossom Boutique", cart:"Cart"}
+};
+document.getElementById('lang').onchange = e=>{
+  const L = e.target.value;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+       el.textContent = i18n[L][el.dataset.i18n];
+  });
+};
 
 /* --- AR preview ---------------------------------------------------- */
 if(navigator.xr || navigator.userAgent.includes('ARCore')){
