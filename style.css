@@ -30,16 +30,6 @@ h2{font-size:24px;margin:12px 0 16px}
   margin-bottom: 16px;
   text-align: justify;
 }
-/* Декоративная рамка под заголовком */
-#page-about h2 {
-  position: relative;
-  display: inline-block;
-  margin-inline: auto;
-}
-#page-about h2::after {
-  left: 50%;
-  transform: translateX(-50%);  /* центрируем линию */
-}
 
 /* О нас – статистика */
 .stats{display:flex;gap:18px;margin:22px 0}
