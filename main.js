@@ -28,13 +28,13 @@ document.getElementById("next").onclick = ()=>{
 
 /* ---------- Модалка «Команда» ---------- */
 const members = {
-  maria:{name:"Мария",role:"Главный флорист",img:"https://i.pravatar.cc/140?u=dmitry",
+  maria:{name:"Мария",role:"Главный флорист",img:"mariya.jpg",
          bio:`15 лет создаёт авторские букеты, проходила стажировки в Париже и Амстердаме.`},
-  alex :{name:"Алексей",role:"Креативный директор",img:"https://i.pravatar.cc/140?u=alex",
+  alex :{name:"Алексей",role:"Креативный директор",img:"aleksey.jpg",
          bio:"Отвечает за тренды и цветовые сочетания, вдохновляется современной живописью."},
-  kate :{name:"Екатерина",role:"Декоратор",img:"https://i.pravatar.cc/140?u=kate",
+  kate :{name:"Екатерина",role:"Декоратор",img:"ekaterina.jpg",
          bio:"Оформляет мероприятия «под ключ», мастер японской техники икебана."},
-  dmitry:{name:"Дмитрий",role:"Логистика",img:"https://i.pravatar.cc/140?u=maria",
+  dmitry:{name:"Дмитрий",role:"Логистика",img:"dmitry.jpg",
          bio:"Следит, чтобы каждый букет приехал вовремя и в идеальном состоянии."}
 };
 
